@@ -20,7 +20,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class DefaultFilterServiceTest {
+class UserFilterServiceTest {
     @Mock
     private UserRepository userRepository;
 
@@ -36,7 +36,7 @@ class DefaultFilterServiceTest {
 
     @BeforeEach
     void setUp() {
-        defaultFilterService = new DefaultFilterService(userRepository);
+        defaultFilterService = new UserFilterService(userRepository);
         when(userRepository.getUser()).thenReturn(user);
     }
 
@@ -57,7 +57,7 @@ class DefaultFilterServiceTest {
     }
 
     @Test
-    void shouldReturnTrueWhenUsingMultipleFilters() {
+    void shouldReturnTrueWhenUsingAllAcc() {
         List<FilterDto> listOfFilters = Lists.newArrayList(
             new FilterDto("age", "33", UserPredicates.IS_GREATER_THAN.getKey()),
             new FilterDto("surname", "Test", UserPredicates.STRING_IS_EQUAL.getKey()),
@@ -68,7 +68,7 @@ class DefaultFilterServiceTest {
     }
 
     @Test
-    void shouldReturnFalseWhenUsingMultipleFilters() {
+    void shouldReturnFalseWhenUsingAllAcc() {
         List<FilterDto> listOfFilters = Lists.newArrayList(
             new FilterDto("age", "33", UserPredicates.IS_GREATER_THAN.getKey()),
             new FilterDto("surname", "Test", UserPredicates.STRING_IS_EQUAL.getKey()),
@@ -78,4 +78,25 @@ class DefaultFilterServiceTest {
         assertThat(result, is(false));
     }
 
+    @Test
+    void shouldReturnTrueWhenUsingAnyAcc() {
+        List<FilterDto> listOfFilters = Lists.newArrayList(
+            new FilterDto("age", "33", UserPredicates.IS_GREATER_THAN.getKey()),
+            new FilterDto("surname", "Test1", UserPredicates.STRING_IS_EQUAL.getKey()),
+            new FilterDto("isMarried", "false", UserPredicates.BOOLEAN_IS_EQUAL.getKey()));
+        boolean result = defaultFilterService.filterByMultiple(listOfFilters, AccumulatorStrategy.ANY);
+
+        assertThat(result, is(true));
+    }
+
+    @Test
+    void shouldReturnFalseWhenUsingAnyAcc() {
+        List<FilterDto> listOfFilters = Lists.newArrayList(
+            new FilterDto("age", "33", UserPredicates.IS_GREATER_THAN.getKey()),
+            new FilterDto("surname", "Test", UserPredicates.STRING_IS_EQUAL.getKey()),
+            new FilterDto("isMarried", "true", UserPredicates.BOOLEAN_IS_EQUAL.getKey()));
+        boolean result = defaultFilterService.filterByMultiple(listOfFilters, AccumulatorStrategy.ANY);
+
+        assertThat(result, is(true));
+    }
 }
