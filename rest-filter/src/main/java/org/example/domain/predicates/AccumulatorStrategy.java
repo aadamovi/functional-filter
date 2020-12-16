@@ -1,16 +1,19 @@
 package org.example.domain.predicates;
 
+import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 
 public enum AccumulatorStrategy implements BinaryOperator<Boolean> {
-    ANY((one, two) -> one || two),
-    ALL((one, two) -> one && two);
+    ANY("any", (one, two) -> one || two),
+    ALL("all", (one, two) -> one && two);
 
+    private final String strategy;
     private final BinaryOperator<Boolean> accumulator;
 
-    AccumulatorStrategy(BinaryOperator<Boolean> accumulator) {
+    AccumulatorStrategy(String strategy, BinaryOperator<Boolean> accumulator) {
+        this.strategy = strategy;
         this.accumulator = accumulator;
     }
 
@@ -24,5 +27,14 @@ public enum AccumulatorStrategy implements BinaryOperator<Boolean> {
         return accumulator.andThen(after);
     }
 
+    public static AccumulatorStrategy getByStrategyName(String strategy) {
+        return Arrays.stream(values())
+            .filter(val -> val.getStrategy().equals(strategy))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("Incorrect strategy supplied"));
+    }
 
+    public String getStrategy() {
+        return strategy;
+    }
 }

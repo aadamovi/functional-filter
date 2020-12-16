@@ -1,25 +1,34 @@
 package org.example.controller;
 
+import org.example.dto.AccumulateFiltersDto;
 import org.example.dto.FilterDto;
 import org.example.service.FilterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class FilterController {
+@RequestMapping("/api/filter/user")
+public class UserFilterController {
 
     private final FilterService filterService;
 
     @Autowired
-    public FilterController(FilterService filterService) {
+    public UserFilterController(FilterService filterService) {
         this.filterService = filterService;
     }
 
-    @PostMapping()
+    @PostMapping
     @ResponseBody
-    public String filter(FilterDto filter) {
+    public String filterBySingleCriteria(FilterDto filter) {
         return String.valueOf(filterService.filterBy(filter));
+    }
+
+    @PostMapping("/accumulate")
+    @ResponseBody
+    public String filterByMultipleCriteria(AccumulateFiltersDto filters) {
+        return String.valueOf(filterService.filterByMultipleCriteria(filters.getFilters(), filters.getAccumulatorType()));
     }
 }

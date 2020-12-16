@@ -15,6 +15,7 @@ import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.example.domain.predicates.AccumulatorStrategy.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
@@ -62,7 +63,7 @@ class UserFilterServiceTest {
             new FilterDto("age", "33", UserPredicates.IS_GREATER_THAN.getKey()),
             new FilterDto("surname", "Test", UserPredicates.STRING_IS_EQUAL.getKey()),
             new FilterDto("isMarried", "true", UserPredicates.BOOLEAN_IS_EQUAL.getKey()));
-        boolean result = defaultFilterService.filterByMultiple(listOfFilters, AccumulatorStrategy.ALL);
+        boolean result = defaultFilterService.filterByMultipleCriteria(listOfFilters, ALL.getStrategy());
 
         assertThat(result, is(true));
     }
@@ -73,7 +74,7 @@ class UserFilterServiceTest {
             new FilterDto("age", "33", UserPredicates.IS_GREATER_THAN.getKey()),
             new FilterDto("surname", "Test", UserPredicates.STRING_IS_EQUAL.getKey()),
             new FilterDto("isMarried", "false", UserPredicates.BOOLEAN_IS_EQUAL.getKey()));
-        boolean result = defaultFilterService.filterByMultiple(listOfFilters, AccumulatorStrategy.ALL);
+        boolean result = defaultFilterService.filterByMultipleCriteria(listOfFilters, ALL.getStrategy());
 
         assertThat(result, is(false));
     }
@@ -84,7 +85,7 @@ class UserFilterServiceTest {
             new FilterDto("age", "33", UserPredicates.IS_GREATER_THAN.getKey()),
             new FilterDto("surname", "Test1", UserPredicates.STRING_IS_EQUAL.getKey()),
             new FilterDto("isMarried", "false", UserPredicates.BOOLEAN_IS_EQUAL.getKey()));
-        boolean result = defaultFilterService.filterByMultiple(listOfFilters, AccumulatorStrategy.ANY);
+        boolean result = defaultFilterService.filterByMultipleCriteria(listOfFilters, ANY.getStrategy());
 
         assertThat(result, is(true));
     }
@@ -95,7 +96,7 @@ class UserFilterServiceTest {
             new FilterDto("age", "33", UserPredicates.IS_GREATER_THAN.getKey()),
             new FilterDto("surname", "Test", UserPredicates.STRING_IS_EQUAL.getKey()),
             new FilterDto("isMarried", "true", UserPredicates.BOOLEAN_IS_EQUAL.getKey()));
-        boolean result = defaultFilterService.filterByMultiple(listOfFilters, AccumulatorStrategy.ANY);
+        boolean result = defaultFilterService.filterByMultipleCriteria(listOfFilters, ANY.getStrategy());
 
         assertThat(result, is(true));
     }
