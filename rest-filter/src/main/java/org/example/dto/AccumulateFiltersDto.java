@@ -3,8 +3,8 @@ package org.example.dto;
 import java.util.List;
 
 public class AccumulateFiltersDto {
-    private List<FilterDto> filters;
-    private String accumulatorType;
+    private final List<FilterDto> filters;
+    private final String accumulatorType;
 
     public AccumulateFiltersDto(List<FilterDto> filters, String accumulatorType) {
         this.filters = filters;

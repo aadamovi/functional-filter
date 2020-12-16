@@ -6,7 +6,7 @@ import java.util.AbstractMap;
 import java.util.Map;
 
 @Repository
-public interface UserRepository {
+public class UserRepository {
     Map<String, String> user = Map.ofEntries(
         new AbstractMap.SimpleEntry<>("firstname", "Joe"),
         new AbstractMap.SimpleEntry<>("surname", "Bloggs"),
@@ -14,8 +14,7 @@ public interface UserRepository {
         new AbstractMap.SimpleEntry<>("age", "35")
     );
 
-
-    default Map<String, String> getUser() {
+    public Map<String, String> getUser() {
         return user;
     }
 }
